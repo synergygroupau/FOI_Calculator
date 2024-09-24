@@ -147,13 +147,16 @@ class Post(db.Model):
 
 class Survey(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    body: so.Mapped[str] = so.mapped_column(sa.String(140))
     timestamp: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc))
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
-
     author: so.Mapped[User] = so.relationship(back_populates='surveys')
+    body: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field1: so.Mapped[float] = so.mapped_column(sa.Float)
+    field2: so.Mapped[float] = so.mapped_column(sa.Float)
+    field3: so.Mapped[float] = so.mapped_column(sa.Float)
+
 
     def __repr__(self):
         return '<Survey {}>'.format(self.body)

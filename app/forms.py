@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField
+    TextAreaField, FloatField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 import sqlalchemy as sa
@@ -66,24 +66,24 @@ class EditProfileForm(FlaskForm):
             
 class EditSurveyForm(FlaskForm):
     survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
-    submit = SubmitField('Submit')
+    field1 = FloatField('Field 1 title', validators=[DataRequired()])
+    field2 = FloatField('Field 2 title', validators=[DataRequired()])
+    field3 = FloatField('Field 3 title', validators=[DataRequired()])
+    submit = SubmitField('Save')
 
     def __init__(self, original_survey_content, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_survey_content = original_survey_content
 
-    def validate_survey(self, survey):
-        # If you need to check if the new survey content already exists
-        if survey.data != self.original_survey_content:
-            existing_survey = db.session.scalar(sa.select(Survey).where(
-                Survey.body == survey.data))  # Assuming 'content' is the field name in your Survey model
-            if existing_survey is not None:
-                raise ValidationError('Please use a different survey response.')
+    # def validate_survey(self, survey):
+    #     if survey.data != self.original_survey_content:
+    #         existing_survey = db.session.scalar(sa.select(Survey).where(
+    #             Survey.body == survey.data)) 
+    #         if existing_survey is not None:
+    #             raise ValidationError('Please use a different survey response.')
 
 
-class EmptyForm(FlaskForm): # def __init__(self, original_username, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.original_username = original_username
+class EmptyForm(FlaskForm): 
     submit = SubmitField('Submit')
 
 
@@ -94,6 +94,8 @@ class PostForm(FlaskForm):
 
 
 class SurveyForm(FlaskForm):
-    survey = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=1, max=140)])
+    survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
+    field1 = FloatField('Field 1 title', validators=[DataRequired()])
+    field2 = FloatField('Field 2 title', validators=[DataRequired()])
+    field3 = FloatField('Field 3 title', validators=[DataRequired()])
     submit = SubmitField('Submit')

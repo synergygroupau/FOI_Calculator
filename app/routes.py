@@ -46,7 +46,13 @@ def index():
 def index_survey():
     form = SurveyForm()
     if form.validate_on_submit():
-        survey = Survey(body=form.survey.data, author=current_user)
+        survey = Survey(
+            body=form.survey.data,
+            author=current_user,
+            field1 = form.field1.data,
+            field2 = form.field2.data,
+            field3 = form.field3.data
+        )
         db.session.add(survey)
         db.session.commit()
         flash('Your survey is now live!')
@@ -209,11 +215,17 @@ def edit_survey(id):
     form = EditSurveyForm(id)
     if form.validate_on_submit():
         survey.body = form.survey.data
+        survey.field1 = form.field1.data
+        survey.field2 = form.field2.data
+        survey.field3 = form.field3.data
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('edit_survey', id=id)) 
     elif request.method == 'GET':
         form.survey.data = survey.body
+        form.field1.data = survey.field1
+        form.field2.data = survey.field2
+        form.field3.data = survey.field3
     return render_template('edit_survey.html', title='Edit Survey',
                            form=form)
 
