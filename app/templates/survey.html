@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table class="table table-hover">
+        <tr>
+            <td>
+                <h1>Survey: {{ survey.id }}</h1>
+                {% if survey.body %}<p>{{ survey.body }}</p>{% endif %}
+            </td>
+        </tr>
+    </table>
+  
+{% endblock %}

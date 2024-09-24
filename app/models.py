@@ -33,6 +33,10 @@ class User(UserMixin, db.Model):
 
     posts: so.WriteOnlyMapped['Post'] = so.relationship(
         back_populates='author')
+    
+    surveys: so.WriteOnlyMapped['Survey'] = so.relationship(
+        back_populates='author')
+
     following: so.WriteOnlyMapped['User'] = so.relationship(
         secondary=followers, primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
@@ -91,6 +95,21 @@ class User(UserMixin, db.Model):
             .group_by(Post)
             .order_by(Post.timestamp.desc())
         )
+    
+    def following_surveys(self):
+        Author = so.aliased(User)
+        # Follower = so.aliased(User)
+        return (
+            sa.select(Survey)
+            .join(Survey.author.of_type(Author))
+            # .join(Author.followers.of_type(Follower), isouter=True)
+            .where(sa.or_(
+                # Follower.id == self.id,
+                Author.id == self.id,
+            ))
+            .group_by(Survey)
+            .order_by(Survey.timestamp.desc())
+        )
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
@@ -124,3 +143,17 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+
+class Survey(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    body: so.Mapped[str] = so.mapped_column(sa.String(140))
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc))
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
+                                               index=True)
+
+    author: so.Mapped[User] = so.relationship(back_populates='surveys')
+
+    def __repr__(self):
+        return '<Survey {}>'.format(self.body)

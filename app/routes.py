@@ -5,8 +5,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
-    EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post
+    EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm, SurveyForm, EditSurveyForm
+from app.models import User, Post, Survey
 from app.email import send_password_reset_email
 
 
@@ -37,6 +37,29 @@ def index():
         if posts.has_prev else None
     return render_template('index.html', title='Home', form=form,
                            posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)
+
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index_survey', methods=['GET', 'POST'])
+@login_required
+def index_survey():
+    form = SurveyForm()
+    if form.validate_on_submit():
+        survey = Survey(body=form.survey.data, author=current_user)
+        db.session.add(survey)
+        db.session.commit()
+        flash('Your survey is now live!')
+        return redirect(url_for('index_survey'))
+    page = request.args.get('page', 1, type=int)
+    surveys = db.paginate(current_user.following_surveys(), page=page,
+                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+    next_url = url_for('index_survey', page=surveys.next_num) \
+        if surveys.has_next else None
+    prev_url = url_for('index', page=surveys.prev_num) \
+        if surveys.has_prev else None
+    return render_template('index_survey.html', title='Home', form=form,
+                           surveys=surveys.items, next_url=next_url,
                            prev_url=prev_url)
 
 
@@ -145,6 +168,23 @@ def user(username):
                            next_url=next_url, prev_url=prev_url, form=form)
 
 
+@app.route('/survey/<id>')
+@login_required
+def survey(id):
+    survey = db.first_or_404(sa.select(Survey).where(Survey.id == id))
+    page = request.args.get('page', 1, type=int)
+    # query = user.surveys.select().order_by(Survey.timestamp.desc())
+    # surveys = db.paginate(query, page=page,
+    #                     per_page=app.config['POSTS_PER_PAGE'],
+    #                     error_out=False)
+    # next_url = url_for('survey', id=survey.id, page=surveys.next_num) \
+    #     if surveys.has_next else None
+    # prev_url = url_for('survey', id=survey.id, page=survey.prev_num) \username
+    #     if survey.has_prev else None
+    form = EmptyForm()
+    return render_template('survey.html', survey=survey)
+
+
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -160,6 +200,23 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+
+
+@app.route('/edit_survey/<id>', methods=['GET', 'POST'])
+@login_required
+def edit_survey(id):
+    survey = db.first_or_404(sa.select(Survey).where(Survey.id == id))
+    form = EditSurveyForm(id)
+    if form.validate_on_submit():
+        survey.body = form.survey.data
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('edit_survey', id=id)) 
+    elif request.method == 'GET':
+        form.survey.data = survey.body
+    return render_template('edit_survey.html', title='Edit Survey',
+                           form=form)
+
 
 
 @app.route('/follow/<username>', methods=['POST'])

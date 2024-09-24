@@ -5,7 +5,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 import sqlalchemy as sa
 from app import db
-from app.models import User
+from app.models import User, Survey
 
 
 class LoginForm(FlaskForm):
@@ -63,13 +63,37 @@ class EditProfileForm(FlaskForm):
                 User.username == username.data))
             if user is not None:
                 raise ValidationError('Please use a different username.')
+            
+class EditSurveyForm(FlaskForm):
+    survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Submit')
+
+    def __init__(self, original_survey_content, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.original_survey_content = original_survey_content
+
+    def validate_survey(self, survey):
+        # If you need to check if the new survey content already exists
+        if survey.data != self.original_survey_content:
+            existing_survey = db.session.scalar(sa.select(Survey).where(
+                Survey.body == survey.data))  # Assuming 'content' is the field name in your Survey model
+            if existing_survey is not None:
+                raise ValidationError('Please use a different survey response.')
 
 
-class EmptyForm(FlaskForm):
+class EmptyForm(FlaskForm): # def __init__(self, original_username, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.original_username = original_username
     submit = SubmitField('Submit')
 
 
 class PostForm(FlaskForm):
     post = TextAreaField('Say something', validators=[
+        DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Submit')
+
+
+class SurveyForm(FlaskForm):
+    survey = TextAreaField('Say something', validators=[
         DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
