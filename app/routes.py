@@ -92,7 +92,7 @@ def new_survey():
     #     if surveys.has_next else None
     # prev_url = url_for('index', page=surveys.prev_num) \
     #     if surveys.has_prev else None
-    return render_template('new_survey.html', title='Home', form=form)
+    return render_template('new_survey.html', title='New survey', form=form)
 
 @app.route('/explore')
 @login_required
@@ -108,9 +108,9 @@ def explore():
     return render_template('index.html', title='Explore', posts=posts.items,
                            next_url=next_url, prev_url=prev_url)
 
-@app.route('/exceptions')
+@app.route('/exemptions')
 @login_required
-def exceptions():
+def exemptions():
     page = request.args.get('page', 1, type=int)
     query = sa.select(Post).order_by(Post.timestamp.desc())
     # posts = db.paginate(query, page=page,
@@ -119,7 +119,7 @@ def exceptions():
     #     if posts.has_next else None
     # prev_url = url_for('explore', page=posts.prev_num) \
     #     if posts.has_prev else None
-    return render_template('exceptions.html', title='Explore')
+    return render_template('exemptions.html', title='Exemptions')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -256,8 +256,11 @@ def edit_survey(id):
         survey.field1 = form.field1.data
         survey.field2 = form.field2.data
         survey.field3 = form.field3.data
+    
         db.session.commit()
         flash('Your changes have been saved.')
+
+
         return redirect(url_for('edit_survey', id=id)) 
     elif request.method == 'GET':
         form.survey.data = survey.body

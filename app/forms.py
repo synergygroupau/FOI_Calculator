@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField, FloatField
+    TextAreaField, FloatField, RadioField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 import sqlalchemy as sa
@@ -67,13 +67,21 @@ class EditProfileForm(FlaskForm):
 class EditSurveyForm(FlaskForm):
     survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
     field1 = FloatField('Field 1 title', validators=[DataRequired()])
-    field2 = FloatField('Field 2 title', validators=[DataRequired()])
-    field3 = FloatField('Field 3 title', validators=[DataRequired()])
+    field2 = SelectField('Field 2 title', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field3 = RadioField('Field 3 title', choices=[(1, 1), (1.5, 1.5),(2, 2)], coerce=float,validators=[DataRequired()])
+
     submit = SubmitField('Save')
 
     def __init__(self, original_survey_content, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_survey_content = original_survey_content
+    
+    # def __init__(self, original_survey, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.survey.data = original_survey.body
+    #     self.field1.data = original_survey.field1
+    #     self.field2.data = original_survey.field2
+    #     self.field3.data = original_survey.field3
 
     # def validate_survey(self, survey):
     #     if survey.data != self.original_survey_content:
@@ -96,6 +104,6 @@ class PostForm(FlaskForm):
 class SurveyForm(FlaskForm):
     survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
     field1 = FloatField('Field 1 title', validators=[DataRequired()])
-    field2 = FloatField('Field 2 title', validators=[DataRequired()])
-    field3 = FloatField('Field 3 title', validators=[DataRequired()])
+    field2 = SelectField('Field 2 title', choices=[(1, 1), (1.5, 1.5),(2, 2)],validators=[DataRequired()])
+    field3 = RadioField('Field 3 title', choices=[(1, 1), (1.5, 1.5),(2, 2)],validators=[DataRequired()])
     submit = SubmitField('Submit')
