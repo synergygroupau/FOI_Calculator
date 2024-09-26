@@ -17,7 +17,7 @@ def before_request():
         db.session.commit()
 
 
-@app.route('/', methods=['GET', 'POST'])
+# @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -44,6 +44,34 @@ def index():
 @app.route('/index_survey', methods=['GET', 'POST'])
 @login_required
 def index_survey():
+    # form = SurveyForm()
+    # if form.validate_on_submit():
+    #     survey = Survey(
+    #         body=form.survey.data,
+    #         author=current_user,
+    #         field1 = form.field1.data,
+    #         field2 = form.field2.data,
+    #         field3 = form.field3.data
+    #     )
+    #     db.session.add(survey)
+    #     db.session.commit()
+    #     flash('Your survey is now live!')
+    #     return redirect(url_for('index_survey'))
+    page = request.args.get('page', 1, type=int)
+    surveys = db.paginate(current_user.following_surveys(), page=page,
+                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+    next_url = url_for('index_survey', page=surveys.next_num) \
+        if surveys.has_next else None
+    prev_url = url_for('index', page=surveys.prev_num) \
+        if surveys.has_prev else None
+    return render_template('index_survey.html', title='Home',
+                           surveys=surveys.items, next_url=next_url,
+                           prev_url=prev_url)
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/new_survey', methods=['GET', 'POST'])
+@login_required
+def new_survey():
     form = SurveyForm()
     if form.validate_on_submit():
         survey = Survey(
@@ -57,17 +85,14 @@ def index_survey():
         db.session.commit()
         flash('Your survey is now live!')
         return redirect(url_for('index_survey'))
-    page = request.args.get('page', 1, type=int)
-    surveys = db.paginate(current_user.following_surveys(), page=page,
-                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
-    next_url = url_for('index_survey', page=surveys.next_num) \
-        if surveys.has_next else None
-    prev_url = url_for('index', page=surveys.prev_num) \
-        if surveys.has_prev else None
-    return render_template('index_survey.html', title='Home', form=form,
-                           surveys=surveys.items, next_url=next_url,
-                           prev_url=prev_url)
-
+    # page = request.args.get('page', 1, type=int)
+    # surveys = db.paginate(current_user.following_surveys(), page=page,
+    #                     per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+    # next_url = url_for('index_survey', page=surveys.next_num) \
+    #     if surveys.has_next else None
+    # prev_url = url_for('index', page=surveys.prev_num) \
+    #     if surveys.has_prev else None
+    return render_template('new_survey.html', title='Home', form=form)
 
 @app.route('/explore')
 @login_required
@@ -82,6 +107,19 @@ def explore():
         if posts.has_prev else None
     return render_template('index.html', title='Explore', posts=posts.items,
                            next_url=next_url, prev_url=prev_url)
+
+@app.route('/exceptions')
+@login_required
+def exceptions():
+    page = request.args.get('page', 1, type=int)
+    query = sa.select(Post).order_by(Post.timestamp.desc())
+    # posts = db.paginate(query, page=page,
+    #                     per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+    # next_url = url_for('explore', page=posts.next_num) \
+    #     if posts.has_next else None
+    # prev_url = url_for('explore', page=posts.prev_num) \
+    #     if posts.has_prev else None
+    return render_template('exceptions.html', title='Explore')
 
 
 @app.route('/login', methods=['GET', 'POST'])

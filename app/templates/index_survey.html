@@ -3,9 +3,18 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% if form %}
+    <!-- {% if form %}
     {{ wtf.quick_form(form) }}
-    {% endif %}
+    {% endif %} -->
+    <nav aria-label="Post navigation">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('new_survey') }}">
+                    New survey <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
     {% for survey in surveys %}
         {% include '_survey.html' %}
     {% endfor %}
