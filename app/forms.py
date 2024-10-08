@@ -65,11 +65,66 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
             
 class EditSurveyForm(FlaskForm):
-    survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
-    field1 = FloatField('Field 1 title', validators=[DataRequired()])
-    field2 = SelectField('Field 2 title', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
-    field3 = RadioField('Field 3 title', choices=[(1, 1), (1.5, 1.5),(2, 2)], coerce=float,validators=[DataRequired()])
+    
+    
+    field1 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment1 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
+    field2 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment2 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field3 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment3 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field4 = FloatField('Amount', validators=[DataRequired()])
+    comment4 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field5 = FloatField('Amount', validators=[DataRequired()])
+    comment5 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field6 = FloatField('Amount', validators=[DataRequired()])
+    comment6 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field7 = FloatField('Amount', validators=[DataRequired()])
+    comment7 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field8 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment8 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field9 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment9 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field10 = FloatField('Amount', validators=[DataRequired()])
+    comment10 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field11 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field12 = FloatField('Consultations', validators=[DataRequired()])
+
+    comment12 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field13 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment13 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field14 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment14 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field15 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment15 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field16 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment16 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field17 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment17 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field18 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment18 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+    field19 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment19 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
+
+
+    result = FloatField('Total', validators=[DataRequired()])
     submit = SubmitField('Save')
 
     def __init__(self, original_survey_content, *args, **kwargs):
@@ -102,8 +157,62 @@ class PostForm(FlaskForm):
 
 
 class SurveyForm(FlaskForm):
-    survey = TextAreaField('Say something', validators=[DataRequired(), Length(min=1, max=140)])
-    field1 = FloatField('Field 1 title', validators=[DataRequired()])
-    field2 = SelectField('Field 2 title', choices=[(1, 1), (1.5, 1.5),(2, 2)],validators=[DataRequired()])
-    field3 = RadioField('Field 3 title', choices=[(1, 1), (1.5, 1.5),(2, 2)],validators=[DataRequired()])
+    field1 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment1 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field2 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment2 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field3 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment3 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field4 = FloatField('Amount', validators=[DataRequired()])
+    comment4 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field5 = FloatField('Amount', validators=[DataRequired()])
+    comment5 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field6 = FloatField('Amount', validators=[DataRequired()])
+    comment6 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field7 = FloatField('Amount', validators=[DataRequired()])
+    comment7 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field8 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment8 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field9 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment9 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field10 = FloatField('Amount', validators=[DataRequired()])
+    comment10 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field11 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field12 = FloatField('Consultations', validators=[DataRequired()])
+
+    comment12 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field13 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment13 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field14 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment14 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field15 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment15 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field16 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment16 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field17 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment17 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field18 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment18 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+    field19 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    comment19 = TextAreaField('Say something', validators=[Length(min=0, max=140)])
+
+
+    result = FloatField('Total', validators=[DataRequired()])
     submit = SubmitField('Submit')

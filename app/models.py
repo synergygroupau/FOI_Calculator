@@ -146,17 +146,73 @@ class Post(db.Model):
 
 
 class Survey(db.Model):
-    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     timestamp: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc))
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
     author: so.Mapped[User] = so.relationship(back_populates='surveys')
-    body: so.Mapped[str] = so.mapped_column(sa.String(140))
-    field1: so.Mapped[float] = so.mapped_column(sa.Float)
-    field2: so.Mapped[float] = so.mapped_column(sa.Float)
-    field3: so.Mapped[float] = so.mapped_column(sa.Float)
 
+    field1: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment1: so.Mapped[str] = so.mapped_column(sa.String(140))
+    
+    field2: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment2: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field3: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment3: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field4: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment4: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field5: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment5: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field6: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment6: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field7: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment7: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field8: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment8: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field9: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment9: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field10: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment10: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field11: so.Mapped[float] = so.mapped_column(sa.Float)
+    field12: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment12: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field13: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment13: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field14: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment14: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field15: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment15: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field16: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment16: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field17: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment17: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field18: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment18: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    field19: so.Mapped[float] = so.mapped_column(sa.Float)
+    comment19: so.Mapped[str] = so.mapped_column(sa.String(140))
+
+    result: so.Mapped[float] = so.mapped_column(sa.Float)
+
+    def friendly_timestamp(self):
+        return self.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime("%a, %b %-d, %-I:%M %p")
 
     def __repr__(self):
         return '<Survey {}>'.format(self.body)
+
