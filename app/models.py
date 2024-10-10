@@ -144,6 +144,8 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
+    
+
 
 class Survey(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
@@ -152,63 +154,65 @@ class Survey(db.Model):
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                                index=True)
     author: so.Mapped[User] = so.relationship(back_populates='surveys')
-
-    field1: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment1: so.Mapped[str] = so.mapped_column(sa.String(140))
     
-    field2: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment2: so.Mapped[str] = so.mapped_column(sa.String(140))
+    survey_name: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False, default="Untitled Survey")
 
-    field3: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment3: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field1: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment1: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    
+    field2: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment2: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field4: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment4: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field3: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment3: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field5: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment5: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field4: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment4: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field6: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment6: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field5: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment5: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field7: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment7: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field6: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment6: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field8: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment8: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field7: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment7: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field9: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment9: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field8: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment8: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field10: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment10: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field9: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment9: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field11: so.Mapped[float] = so.mapped_column(sa.Float)
-    field12: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment12: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field10: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment10: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field13: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment13: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field11: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    field12: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment12: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field14: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment14: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field13: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment13: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field15: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment15: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field14: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment14: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field16: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment16: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field15: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment15: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field17: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment17: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field16: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment16: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field18: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment18: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field17: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment17: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    field19: so.Mapped[float] = so.mapped_column(sa.Float)
-    comment19: so.Mapped[str] = so.mapped_column(sa.String(140))
+    field18: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment18: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
 
-    result: so.Mapped[float] = so.mapped_column(sa.Float)
+    field19: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
+    comment19: so.Mapped[str] = so.mapped_column(sa.String(140),nullable=True)
+
+    result: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
 
     def friendly_timestamp(self):
         return self.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime("%a, %b %-d, %-I:%M %p")

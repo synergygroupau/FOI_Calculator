@@ -40,7 +40,6 @@ def index():
                            prev_url=prev_url)
 
 
-@app.route('/', methods=['GET', 'POST'])
 @app.route('/index_survey', methods=['GET', 'POST'])
 @login_required
 def index_survey():
@@ -57,6 +56,21 @@ def index_survey():
     #     db.session.commit()
     #     flash('Your survey is now live!')
     #     return redirect(url_for('index_survey'))
+
+
+    form = SurveyForm()
+    if form.validate_on_submit():
+        survey = Survey(
+            author=current_user,
+            survey_name = form.survey_name.data
+        )
+
+        db.session.add(survey)
+        db.session.commit()
+        flash('Survey created!')
+        return redirect(url_for('edit_survey',id=survey.id))
+
+
     page = request.args.get('page', 1, type=int)
     surveys = db.paginate(current_user.following_surveys(), page=page,
                         per_page=app.config['POSTS_PER_PAGE'], error_out=False)
@@ -66,9 +80,9 @@ def index_survey():
         if surveys.has_prev else None
     return render_template('index_survey.html', title='Home',
                            surveys=surveys.items, next_url=next_url,
-                           prev_url=prev_url)
+                           prev_url=prev_url,form=form)
 
-@app.route('/', methods=['GET', 'POST'])
+   
 @app.route('/new_survey', methods=['GET', 'POST'])
 @login_required
 def new_survey():
@@ -76,6 +90,7 @@ def new_survey():
     if form.validate_on_submit():
         survey = Survey(
             author=current_user,
+            survey_name = form.survey_name.data,
 
             field1 = form.field1.data,
             comment1 = form.comment1.data,
@@ -132,7 +147,7 @@ def new_survey():
             field19 = form.field19.data,
             comment19 = form.comment19.data,
            
-            result=form.result.data,
+            result=form.result.data
             
         )
         db.session.add(survey)
@@ -146,7 +161,7 @@ def new_survey():
     #     if surveys.has_next else None
     # prev_url = url_for('index', page=surveys.prev_num) \
     #     if surveys.has_prev else None
-    return render_template('new_survey.html', title='New survey', form=form)
+    return render_template('new_survey.html', title='New survey', form1=form,form2=form)
 
 @app.route('/explore')
 @login_required
@@ -175,7 +190,7 @@ def exemptions():
     #     if posts.has_prev else None
     return render_template('exemptions.html', title='Exemptions')
 
-
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -306,63 +321,64 @@ def edit_survey(id):
     survey = db.first_or_404(sa.select(Survey).where(Survey.id == id))
     form = EditSurveyForm(id)
     if form.validate_on_submit():
+        survey.survey_name = form.survey_name.data
 
-        survey.field1 = form.field1.data,
-        survey.comment1=form.comment1.data,
+        survey.field1 = form.field1.data
+        survey.comment1=form.comment1.data
 
-        field2 = form.field2.data,
-        comment2=form.comment2.data,
+        survey.field2 = form.field2.data
+        survey.comment2=form.comment2.data
 
-        field3 = form.field3.data,
-        comment3 = form.comment3.data,
+        survey.field3 = form.field3.data
+        survey.comment3 = form.comment3.data
 
-        field4 = form.field4.data,
-        comment4 = form.comment4.data,
+        survey.field4 = form.field4.data
+        survey.comment4 = form.comment4.data
 
-        field5 = form.field5.data,
-        comment5 = form.comment5.data,
+        survey.field5 = form.field5.data
+        survey.comment5 = form.comment5.data
 
-        field6 = form.field6.data,
-        comment6 = form.comment6.data,
+        survey.field6 = form.field6.data
+        survey.comment6 = form.comment6.data
 
-        field7 = form.field7.data,
-        comment7 = form.comment7.data,
+        survey.field7 = form.field7.data
+        survey.comment7 = form.comment7.data
 
-        field8 = form.field8.data,
-        comment8 = form.comment8.data,
+        survey.field8 = form.field8.data
+        survey.comment8 = form.comment8.data
 
-        field9 = form.field9.data,
-        comment9 = form.comment9.data,
+        survey.field9 = form.field9.data
+        survey.comment9 = form.comment9.data
 
-        field10 = form.field10.data,
-        comment10 = form.comment10.data,
+        survey.field10 = form.field10.data
+        survey.comment10 = form.comment10.data
 
-        field11 = form.field11.data,
-        field12 = form.field12.data,
-        comment12 = form.comment12.data,
+        survey.field11 = form.field11.data
+        survey.field12 = form.field12.data
+        survey.comment12 = form.comment12.data
 
-        field13 = form.field13.data,
-        comment13 = form.comment13.data,
+        survey.field13 = form.field13.data
+        survey.comment13 = form.comment13.data
 
-        field14 = form.field14.data,
-        comment14 = form.comment14.data,
+        survey.field14 = form.field14.data
+        survey.comment14 = form.comment14.data
 
-        field15 = form.field15.data,
-        comment15 = form.comment15.data,
+        survey.field15 = form.field15.data
+        survey.comment15 = form.comment15.data
 
-        field16 = form.field16.data,
-        comment16 = form.comment16.data,
+        survey.field16 = form.field16.data
+        survey.comment16 = form.comment16.data
 
-        field17 = form.field17.data,
-        comment17 = form.comment17.data,
+        survey.field17 = form.field17.data
+        survey.comment17 = form.comment17.data
 
-        field18 = form.field18.data,
-        comment18 = form.comment18.data,
+        survey.field18 = form.field18.data
+        survey.comment18 = form.comment18.data
 
-        field19 = form.field19.data,
-        comment19 = form.comment19.data,
+        survey.field19 = form.field19.data
+        survey.comment19 = form.comment19.data
         
-        result=form.result.data,
+        survey.result=form.result.data
             
         
     
@@ -374,6 +390,8 @@ def edit_survey(id):
     
 
     elif request.method == 'GET':
+        form.survey_name.data = survey.survey_name
+
         form.field1.data = survey.field1
         form.comment1.data = survey.comment1
 
@@ -432,7 +450,7 @@ def edit_survey(id):
         form.result.data = survey.result
 
     return render_template('edit_survey.html', title='Edit Survey',
-                           form=form)
+                           form1=form,form2=form)
 
 
 

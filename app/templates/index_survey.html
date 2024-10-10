@@ -11,9 +11,14 @@
     <nav aria-label="Post navigation">
         <ul class="pagination">
             <li class="page-item">
-                <a style="background-color: purple; color:white" class="page-link" href="{{ url_for('new_survey') }}">
-                    New survey <span aria-hidden="true">&rarr;</span>
-                </a>
+                <!-- <a style="background-color: purple; color:white" class="page-link" href="{{ url_for('new_survey') }}"> -->
+                    <!-- New survey <span aria-hidden="true">&rarr;</span> -->
+                <!-- </a> -->
+                 
+                {% if form %}
+                {{ wtf.new_survey_form(form) }}
+                {% endif %}
+
             </li>
         </ul>
     </nav>

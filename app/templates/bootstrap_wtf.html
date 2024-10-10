@@ -103,6 +103,21 @@
               {%- endfor %}
             </div>
 
+        {%- elif field.type == 'StringField' %}
+            <div class="mb-3">
+              <!-- {{ field.label(class='form-label') }}  -->
+               
+              {% if autofocus %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
+              {% else %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+              {% endif %}
+              {%- for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+              {%- endfor %}
+            </div>
+
+
 
         {%- elif field.type == 'SubmitField' %}
             {{ field(class='btn btn-primary mb-3') }}
@@ -162,15 +177,15 @@
 
 
 
-{% macro survey_form(form, action="", method="post", id="", novalidate=False) %}
+{% macro survey_form(form1,form2, action="", method="post", id="", novalidate=False) %}
     <form
       {%- if action != None %} action="{{ action }}"{% endif -%}
       {%- if method %} method="{{ method }}"{% endif %}
       {%- if id %} id="{{ id }}"{% endif -%}
       {%- if novalidate %} novalidate{% endif -%}>
-      {{ form.hidden_tag() }}
-      {%- for field, errors in form.errors.items() %}
-        {%- if form[field].widget.input_type == 'hidden' %}
+      {{ form1.hidden_tag() }}
+      {%- for field, errors in form1.errors.items() %}
+        {%- if form1[field].widget.input_type == 'hidden' %}
           {%- for error in errors %}
           <div class="invalid-feedback">{{ error }}</div>
           {%- endfor %}
@@ -178,7 +193,21 @@
       {%- endfor %}
 
       {% set ns = namespace(first_field=true) %}
+
       <div class="container">
+        <div class="row pb-5 align-items-end">
+          <div class="col">
+               
+                {% set ns = namespace(first_field=true) %}
+                {% if form1.survey_name.widget.input_type != 'hidden' -%}
+                  {{ survey_field(form1.survey_name, ns.first_field) }}
+                  {% set ns.first_field = false %}
+                {%- endif %}
+              
+          </div>
+      </div>
+
+
 
         <div class="row pb-2">
           <div class="col-6">
@@ -203,15 +232,15 @@
                 </div>
                 <div class="col ">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field1.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field1, ns.first_field) }}
+                    {% if form1.field1.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field1, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col ">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment1.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment1, ns.first_field) }}
+                    {% if form1.comment1.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment1, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -224,15 +253,15 @@
               </div>
               <div class="col">
                 {% set ns = namespace(first_field=true) %}
-                  {% if form.field2.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form.field2, ns.first_field) }}
+                  {% if form1.field2.widget.input_type != 'hidden' -%}
+                    {{ survey_field(form1.field2, ns.first_field) }}
                     {% set ns.first_field = false %}
                   {%- endif %}
               </div>
               <div class="col">
                 {% set ns = namespace(first_field=true) %}
-                  {% if form.comment2.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form.comment2, ns.first_field) }}
+                  {% if form1.comment2.widget.input_type != 'hidden' -%}
+                    {{ survey_field(form1.comment2, ns.first_field) }}
                     {% set ns.first_field = false %}
                   {%- endif %}
               </div>
@@ -245,15 +274,15 @@
               </div>
               <div class="col">
                 {% set ns = namespace(first_field=true) %}
-                  {% if form.field3.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form.field3, ns.first_field) }}
+                  {% if form1.field3.widget.input_type != 'hidden' -%}
+                    {{ survey_field(form1.field3, ns.first_field) }}
                     {% set ns.first_field = false %}
                   {%- endif %}
               </div>
               <div class="col">
                 {% set ns = namespace(first_field=true) %}
-                  {% if form.comment3.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form.comment3, ns.first_field) }}
+                  {% if form1.comment3.widget.input_type != 'hidden' -%}
+                    {{ survey_field(form1.comment3, ns.first_field) }}
                     {% set ns.first_field = false %}
                   {%- endif %}
               </div>
@@ -266,15 +295,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field4.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field4, ns.first_field) }}
+                    {% if form1.field4.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field4, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment4.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment4, ns.first_field) }}
+                    {% if form1.comment4.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment4, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -287,15 +316,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field5.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field5, ns.first_field) }}
+                    {% if form1.field5.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field5, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment5.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment5, ns.first_field) }}
+                    {% if form1.comment5.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment5, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -308,15 +337,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field6.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field6, ns.first_field) }}
+                    {% if form1.field6.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field6, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment6.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment6, ns.first_field) }}
+                    {% if form1.comment6.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment6, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -329,15 +358,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field7.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field7, ns.first_field) }}
+                    {% if form1.field7.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field7, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment7.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment7, ns.first_field) }}
+                    {% if form1.comment7.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment7, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -350,15 +379,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field8.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field8, ns.first_field) }}
+                    {% if form1.field8.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field8, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment8.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment8, ns.first_field) }}
+                    {% if form1.comment8.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment8, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -371,15 +400,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field9.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field9, ns.first_field) }}
+                    {% if form1.field9.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field9, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment9.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment9, ns.first_field) }}
+                    {% if form1.comment9.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment9, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -392,15 +421,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field10.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field10, ns.first_field) }}
+                    {% if form1.field10.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field10, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment10.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment10, ns.first_field) }}
+                    {% if form1.comment10.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment10, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -413,21 +442,21 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field11.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field11, ns.first_field) }}
+                    {% if form1.field11.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field11, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
 
                   {% set ns = namespace(first_field=true) %}
-                  {% if form.field12.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form.field12, ns.first_field) }}
+                  {% if form1.field12.widget.input_type != 'hidden' -%}
+                    {{ survey_field(form1.field12, ns.first_field) }}
                     {% set ns.first_field = false %}
                   {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment12.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment12, ns.first_field) }}
+                    {% if form1.comment12.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment12, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -440,22 +469,22 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field13.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field13, ns.first_field) }}
+                    {% if form1.field13.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field13, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment13.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment13, ns.first_field) }}
+                    {% if form1.comment13.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment13, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
         </div>
         <div class="row pb-5">
               <div class="col-6">
-                <p>Exemptions found on "Exemptions" page</p>
+                <p><b>Exemptions</b></p>
               </div>
               <div class="col">
                 
@@ -465,6 +494,34 @@
               </div>
         </div>
 
+        <div class="row pb-5">
+                <div class="col-6">
+                    <p>
+                      Access Refusal for other grounds - Available in public register, Archives, National Film & Sound, etc.
+                    </p>
+                </div>
+                <div class="col">
+                  {% set ns = namespace(first_field=true) %}
+                    {% if form1.field13.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field13, ns.first_field) }}
+                      {% set ns.first_field = false %}
+                    {%- endif %}
+                </div>
+                <div class="col">
+                  {% set ns = namespace(first_field=true) %}
+                    {% if form1.comment13.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment13, ns.first_field) }}
+                      {% set ns.first_field = false %}
+                    {%- endif %}
+                </div>
+        </div>
+
+
+
+    </div>
+
+        <hr>
+        <hr>
         
         <div class="row pb-5">
                 <div class="col-6">
@@ -474,15 +531,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field14.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field14, ns.first_field) }}
+                    {% if form1.field14.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field14, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment14.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment14, ns.first_field) }}
+                    {% if form1.comment14.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment14, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -495,15 +552,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field15.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field15, ns.first_field) }}
+                    {% if form1.field15.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field15, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment15.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment15, ns.first_field) }}
+                    {% if form1.comment15.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment15, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -516,15 +573,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field16.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field16, ns.first_field) }}
+                    {% if form1.field16.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field16, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment16.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment16, ns.first_field) }}
+                    {% if form1.comment16.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment16, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -537,15 +594,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field17.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field17, ns.first_field) }}
+                    {% if form1.field17.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field17, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment17.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment17, ns.first_field) }}
+                    {% if form1.comment17.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment17, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -558,15 +615,15 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field18.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field18, ns.first_field) }}
+                    {% if form1.field18.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field18, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment18.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment18, ns.first_field) }}
+                    {% if form1.comment18.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment18, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -579,30 +636,35 @@
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.field19.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.field19, ns.first_field) }}
+                    {% if form1.field19.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.field19, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
                 <div class="col">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.comment19.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.comment19, ns.first_field) }}
+                    {% if form1.comment19.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.comment19, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
         </div>
+
+        
+
+
+
         <div class="row pb-5">
-                <div class="col-6">
+                <div class="col-sm-12 col-4">
                     
                 </div>
-                <div class="col">
+                <div class="col-sm-12 col-4">
                   
                 </div>
-                <div class="col">
+                <div class="col-sm-12 col-4">
                   {% set ns = namespace(first_field=true) %}
-                    {% if form.result.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form.result, ns.first_field) }}
+                    {% if form1.result.widget.input_type != 'hidden' -%}
+                      {{ survey_field(form1.result, ns.first_field) }}
                       {% set ns.first_field = false %}
                     {%- endif %}
                 </div>
@@ -611,8 +673,8 @@
         <div class="row pb-5">
           <div class="col-6">
             {% set ns = namespace(first_field=true) %}
-              {% if form.submit.widget.input_type != 'hidden' -%}
-                {{ survey_field(form.submit, ns.first_field) }}
+              {% if form1.submit.widget.input_type != 'hidden' -%}
+                {{ survey_field(form1.submit, ns.first_field) }}
                 {% set ns.first_field = false %}
               {%- endif %}
           </div>
@@ -623,11 +685,59 @@
             
           </div>
         </div>
+        
 
+      
       
       </div>
      
     
+    </form>
+{% endmacro %}
+
+
+
+
+
+
+{% macro new_survey_form(form, action="", method="post", id="", novalidate=False) %}
+    <form
+      {%- if action != None %} action="{{ action }}"{% endif -%}
+      {%- if method %} method="{{ method }}"{% endif %}
+      {%- if id %} id="{{ id }}"{% endif -%}
+      {%- if novalidate %} novalidate{% endif -%}>
+      {{ form.hidden_tag() }}
+      {%- for field, errors in form.errors.items() %}
+        {%- if form[field].widget.input_type == 'hidden' %}
+          {%- for error in errors %}
+          <div class="invalid-feedback">{{ error }}</div>
+          {%- endfor %}
+        {%- endif %}
+      {%- endfor %}
+
+      {% set ns = namespace(first_field=true) %}
+
+          <div class="container">
+              <div class="row pb-5 align-items-end">
+                    <div class="col">
+                        
+                          {% set ns = namespace(first_field=true) %}
+                          {% if form.survey_name.widget.input_type != 'hidden' -%}
+                            {{ survey_field(form.survey_name, ns.first_field) }}
+                            {% set ns.first_field = false %}
+                          {%- endif %}
+                    </div>
+                  
+                    <div class="col">
+                        {% set ns = namespace(first_field=true) %}
+                          {% if form.submit.widget.input_type != 'hidden' -%}
+                            {{ survey_field(form.submit, ns.first_field) }}
+                            {% set ns.first_field = false %}
+                          {%- endif %}
+                    </div>
+              </div>
+          </div>
+
     </form>
 {% endmacro %}
 
