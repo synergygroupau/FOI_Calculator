@@ -144,6 +144,7 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
+
     
 
 
@@ -156,6 +157,10 @@ class Survey(db.Model):
     author: so.Mapped[User] = so.relationship(back_populates='surveys')
     
     survey_name: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=False, default="Untitled Survey")
+
+    exemptions: so.WriteOnlyMapped['Exemption'] = so.relationship(
+        back_populates='author')
+    
 
     field1: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
     comment1: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
@@ -214,9 +219,40 @@ class Survey(db.Model):
 
     result: so.Mapped[float] = so.mapped_column(sa.Float,nullable=True)
 
+
+    def following_exemptions(self):
+        return (
+        sa.select(Exemption)
+        .join(Survey, Exemption.survey_id == Survey.id)  # Fix here
+        .where(Survey.id == self.id)
+        .group_by(Exemption)
+        .order_by(Exemption.timestamp.desc())
+    )
+
+    
     def friendly_timestamp(self):
         return self.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime("%a, %b %-d, %-I:%M %p")
 
     def __repr__(self):
         return '<Survey {}>'.format(self.body)
+
+
+
+class Exemption(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+
+    exemption_name: so.Mapped[str] = so.mapped_column(sa.String(140))
+    exemption_instance: so.Mapped[float] = so.mapped_column(sa.Float)
+    exemption_multiplier: so.Mapped[float] = so.mapped_column(sa.Float)
+    exemption_time: so.Mapped[float] = so.mapped_column(sa.Float)
+
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc))
+    survey_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Survey.id),
+                                               index=True)
+    author: so.Mapped[Survey] = so.relationship(back_populates='exemptions')
+
+    def __repr__(self):
+        return '<Exemption {}>'.format(self.exemption_name)
+
 

@@ -1,4 +1,5 @@
 {% macro form_field(field, autofocus) %}
+
         {%- if field.type == 'BooleanField' %}  
               <div class="form-check mb-3">
                 {{ field(class='form-check-input') }}
@@ -17,6 +18,7 @@
 
 
         {%- elif field.type == 'SelectField' %} 
+             
               {{ field.label(class='form-label') }}
               {{ field(class='form-select mb-3') }}
 
@@ -86,8 +88,6 @@
           </div>
         </div>
               
-              
-
 
         {%- elif field.type == 'TextAreaField' %}
             <div class="mb-3">
@@ -147,6 +147,134 @@
 
 
 
+{% macro three_col_row(middle_field, end_field) %}
+    <div class="row pb-5">
+      <div class="col-6">
+          <p>
+            {{ middle_field.description }}
+          </p>
+      </div>
+      <div class="col ">
+        {% set ns = namespace(first_field=true) %}
+          {% if middle_field.widget.input_type != 'hidden' -%}
+            {{ survey_field(middle_field, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+      <div class="col ">
+        {% set ns = namespace(first_field=true) %}
+          {% if end_field.widget.input_type != 'hidden' -%}
+            {{ survey_field(end_field, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+    </div>
+{% endmacro %}
+
+
+{% macro three_col_row_extra_field(middle_field, end_field, extra_field) %}
+    <div class="row pb-5">
+      <div class="col-6">
+          <p>
+            {{ middle_field.description }}
+          </p>
+      </div>
+      <div class="col">
+        {% set ns = namespace(first_field=true) %}
+          {% if middle_field.widget.input_type != 'hidden' -%}
+            {{ survey_field(middle_field, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+
+        {% set ns = namespace(first_field=true) %}
+        {% if extra_field.widget.input_type != 'hidden' -%}
+          {{ survey_field(extra_field, ns.first_field) }}
+          {% set ns.first_field = false %}
+        {%- endif %}
+      </div>
+      <div class="col">
+        {% set ns = namespace(first_field=true) %}
+          {% if end_field.widget.input_type != 'hidden' -%}
+            {{ survey_field(end_field, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+    </div>
+{% endmacro %}
+
+
+
+{% macro single_col_row(field) %}
+  <div class="row pb-5 align-items-end">
+    <div class="col">
+        
+          {% set ns = namespace(first_field=true) %}
+          {% if field.widget.input_type != 'hidden' -%}
+            {{ survey_field(field, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+        
+    </div>
+  </div>
+{% endmacro %}
+
+
+
+{% macro banner(left,middle,right) %}
+    <div class="row pb-2">
+            <div class="col-6">
+              {{ left }}
+            </div>
+            <div class="col ">
+              {{ middle }}
+            </div>
+            <div class="col ">
+              {{ right }}
+            </div>
+    </div>
+    <hr>
+{% endmacro %}
+
+{% macro exemption_row(e1,e2,e3,e4,e5) %}
+    <div class="row pb-5">
+      <div class="col">
+        {% set ns = namespace(first_field=true) %}
+          {% if e1.widget.input_type != 'hidden' -%}
+            {{ survey_field(e1, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+      <div class="col">
+        {% set ns = namespace(first_field=true) %}
+          {% if e2.widget.input_type != 'hidden' -%}
+            {{ survey_field(e2, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+      <div class="col">
+        {% set ns = namespace(first_field=true) %}
+          {% if e3.widget.input_type != 'hidden' -%}
+            {{ survey_field(e3, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+      <div class="col">
+        {% set ns = namespace(first_field=true) %}
+          {% if e4.widget.input_type != 'hidden' -%}
+            {{ survey_field(e4, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+      <div class="col">
+          {% set ns = namespace(first_field=true) %}
+          {% if e5.widget.input_type != 'hidden' -%}
+            {{ survey_field(e5, ns.first_field) }}
+            {% set ns.first_field = false %}
+          {%- endif %}
+      </div>
+    </div>
+    <hr>
+{% endmacro %}
 
 
 
@@ -177,7 +305,7 @@
 
 
 
-{% macro survey_form(form1,form2, action="", method="post", id="", novalidate=False) %}
+{% macro survey_form(form1,form2,exemptions, action="", method="post", id="", novalidate=False) %}
     <form
       {%- if action != None %} action="{{ action }}"{% endif -%}
       {%- if method %} method="{{ method }}"{% endif %}
@@ -195,502 +323,39 @@
       {% set ns = namespace(first_field=true) %}
 
       <div class="container">
-        <div class="row pb-5 align-items-end">
-          <div class="col">
-               
-                {% set ns = namespace(first_field=true) %}
-                {% if form1.survey_name.widget.input_type != 'hidden' -%}
-                  {{ survey_field(form1.survey_name, ns.first_field) }}
-                  {% set ns.first_field = false %}
-                {%- endif %}
-              
-          </div>
+
+              {{ single_col_row(form1.survey_name)}}
+              {{ banner("","","Notes") }}
+              {{ three_col_row(form1.field1, form1.comment1)}}
+              {{ three_col_row(form1.field2, form1.comment2)}}
+              {{ three_col_row(form1.field3, form1.comment3)}}
+              {{ three_col_row(form1.field4, form1.comment4)}}
+              {{ three_col_row(form1.field5, form1.comment5)}}
+              {{ three_col_row(form1.field6, form1.comment6)}}
+              {{ three_col_row(form1.field7, form1.comment7)}}
+              {{ three_col_row(form1.field8, form1.comment8)}}
+              {{ three_col_row(form1.field9, form1.comment9)}}
+              {{ three_col_row(form1.field10, form1.comment10)}}
+              {{ three_col_row_extra_field(form1.field11, form1.comment12, form1.field12)}}
+              {{ three_col_row(form1.field13, form1.comment13)}}
+              {{ banner("Exemptions","","") }}
+              {{ exemption_row(form2.exemption_name, form2.exemption_instance, form2.exemption_multiplier, form2.exemption_time,form2.submit) }}
+              <div class="row pb-5">
+                        {% for exemption in exemptions %}
+                        {% include '_exemption.html' %}
+                      {% endfor %}
+              </div>
+              <hr>
+              {{ three_col_row(form1.field14, form1.comment14)}}
+              {{ three_col_row(form1.field15, form1.comment15)}}
+              {{ three_col_row(form1.field16, form1.comment16)}}
+              {{ three_col_row(form1.field17, form1.comment17)}}
+              {{ three_col_row(form1.field18, form1.comment18)}}
+              {{ three_col_row(form1.field19, form1.comment19)}}
+              {{ single_col_row(form1.result)}}
+              {{ single_col_row(form1.submit)}}
+    
       </div>
-
-
-
-        <div class="row pb-2">
-          <div class="col-6">
-              <p>
-                
-              </p>
-          </div>
-          <div class="col ">
-            
-          </div>
-          <div class="col ">
-                Notes
-          </div>
-        </div>
-          <hr>
-
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Reading into file - Existing file, with correspendence (Not 'discovered'  documents)
-                    </p>
-                </div>
-                <div class="col ">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field1.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field1, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col ">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment1.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment1, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-              <div class="col-6">
-                  <p>
-                    With OOT matters - and if the documents provided by agency are 'out of scope,' i.e. there are excess documents. This will require file notes a) identifying the relevant documents or pages within a given document, e.g. Document 10, pages 6-11. b) Relevant detials contained in the 'out of scope' document, c) rationale as to why the document or pages are not 'in scope,' and d) covering email with a copy of the file note, explaining the removal of the documents/pages. 
-                  </p>
-              </div>
-              <div class="col">
-                {% set ns = namespace(first_field=true) %}
-                  {% if form1.field2.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form1.field2, ns.first_field) }}
-                    {% set ns.first_field = false %}
-                  {%- endif %}
-              </div>
-              <div class="col">
-                {% set ns = namespace(first_field=true) %}
-                  {% if form1.comment2.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form1.comment2, ns.first_field) }}
-                    {% set ns.first_field = false %}
-                  {%- endif %}
-              </div>
-      </div>
-      <div class="row pb-5">
-              <div class="col-6">
-                  <p>
-                    Creating schedule of 'in scope' documents
-                  </p>
-              </div>
-              <div class="col">
-                {% set ns = namespace(first_field=true) %}
-                  {% if form1.field3.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form1.field3, ns.first_field) }}
-                    {% set ns.first_field = false %}
-                  {%- endif %}
-              </div>
-              <div class="col">
-                {% set ns = namespace(first_field=true) %}
-                  {% if form1.comment3.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form1.comment3, ns.first_field) }}
-                    {% set ns.first_field = false %}
-                  {%- endif %}
-              </div>
-      </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      a) Initial review of confirmed 'in scope' documents (2min)
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field4.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field4, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment4.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment4, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      b) Identification of 3rd parties for consult (1min)
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field5.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field5, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment5.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment5, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      c) Summary Identification of Potential Exemption Arguments (PEAs - 1 min)
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field6.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field6, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment6.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment6, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      d) Summary of PEA & Inputting data into calculator (1 min)
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field7.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field7, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment7.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment7, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Drafting Chronology for FOI Determination
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field8.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field8, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment8.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment8, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Research & Review of background, policies & other materials for understanding material facts for FOI Determination
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field9.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field9, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment9.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment9, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Corro - 3rd party consultation drafting letter, confirming address details for email, creating copies of relevant documents for consideration, specific explanation required if complex
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field10.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field10, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment10.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment10, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Review 3rd party contentions, making files of same, consideration for inclusion in Material Statement of Fact and Draft FOI Determination
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field11.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field11, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-
-                  {% set ns = namespace(first_field=true) %}
-                  {% if form1.field12.widget.input_type != 'hidden' -%}
-                    {{ survey_field(form1.field12, ns.first_field) }}
-                    {% set ns.first_field = false %}
-                  {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment12.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment12, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Access Refusal for other grounds - Available in public register, Archives, National Film & Sound, etc.
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field13.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field13, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment13.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment13, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-              <div class="col-6">
-                <p><b>Exemptions</b></p>
-              </div>
-              <div class="col">
-                
-              </div>
-              <div class="col">
-               
-              </div>
-        </div>
-
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Access Refusal for other grounds - Available in public register, Archives, National Film & Sound, etc.
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field13.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field13, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment13.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment13, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-
-
-
-    </div>
-
-        <hr>
-        <hr>
-        
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Finalisation of Schedule of Documents, reflecting exemption grounds
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field14.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field14, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment14.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment14, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Redaction of any information or sections of partially released documents
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field15.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field15, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment15.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment15, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Converting partial or fully documents into 'printed' PDF versions (so inalterable, no metadata retained)
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field16.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field16, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment16.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment16, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Final review of Draft FOI Decision, confirming findings of facts with Ops or Other Group
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field17.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field17, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment17.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment17, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Collating Final FOI decision, all printed PDF documents with information regarding review & appeal rights, including 3rd parties' right to object if determination = to release
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field18.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field18, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment18.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment18, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-        <div class="row pb-5">
-                <div class="col-6">
-                    <p>
-                      Drafting briefings for executives regarding draft final decision
-                    </p>
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.field19.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.field19, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-                <div class="col">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.comment19.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.comment19, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-        </div>
-
-        
-
-
-
-        <div class="row pb-5">
-                <div class="col-sm-12 col-4">
-                    
-                </div>
-                <div class="col-sm-12 col-4">
-                  
-                </div>
-                <div class="col-sm-12 col-4">
-                  {% set ns = namespace(first_field=true) %}
-                    {% if form1.result.widget.input_type != 'hidden' -%}
-                      {{ survey_field(form1.result, ns.first_field) }}
-                      {% set ns.first_field = false %}
-                    {%- endif %}
-                </div>
-      </div>
-
-        <div class="row pb-5">
-          <div class="col-6">
-            {% set ns = namespace(first_field=true) %}
-              {% if form1.submit.widget.input_type != 'hidden' -%}
-                {{ survey_field(form1.submit, ns.first_field) }}
-                {% set ns.first_field = false %}
-              {%- endif %}
-          </div>
-          <div class="col">
-
-          </div>
-          <div class="col">
-            
-          </div>
-        </div>
-        
-
-      
-      
-      </div>
-     
     
     </form>
 {% endmacro %}
@@ -719,6 +384,9 @@
 
           <div class="container">
               <div class="row pb-5 align-items-end">
+                    <div class="p-4 col">
+                        New survey:
+                    </div>
                     <div class="col">
                         
                           {% set ns = namespace(first_field=true) %}

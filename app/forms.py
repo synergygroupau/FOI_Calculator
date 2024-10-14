@@ -67,60 +67,78 @@ class EditProfileForm(FlaskForm):
 class EditSurveyForm(FlaskForm):
     survey_name = StringField('Name', validators=[DataRequired(),Length(min=0, max=140)])
     
-    field1 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field1 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                         description="Reading into file - Existing file, with correspendence (Not 'discovered' documents)")
     comment1 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field2 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field2 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                         description="With OOT matters - and if the documents provided by agency are 'out of scope,' i.e. there are excess documents. This will require file notes a) identifying the relevant documents or pages within a given document, e.g. Document 10, pages 6-11. b) Relevant detials contained in the 'out of scope' document, c) rationale as to why the document or pages are not 'in scope,' and d) covering email with a copy of the file note, explaining the removal of the documents/pages. ")
     comment2 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field3 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field3 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                         description="Creating schedule of 'in scope' documents")
     comment3 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field4 = FloatField('Amount', validators=[DataRequired()])
+    field4 = FloatField('Amount', validators=[DataRequired()],
+                        description="a) Initial review of confirmed 'in scope' documents (2min)")
     comment4 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field5 = FloatField('Amount', validators=[DataRequired()])
+    field5 = FloatField('Amount', validators=[DataRequired()],
+                        description="b) Identification of 3rd parties for consult (1min)")
     comment5 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field6 = FloatField('Amount', validators=[DataRequired()])
+    field6 = FloatField('Amount', validators=[DataRequired()],
+                        description="c) Summary Identification of Potential Exemption Arguments (PEAs - 1 min)")
     comment6 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field7 = FloatField('Amount', validators=[DataRequired()])
+    field7 = FloatField('Amount', validators=[DataRequired()],
+                        description="d) Summary of PEA & Inputting data into calculator (1 min)")
     comment7 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field8 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field8 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                         description="Drafting Chronology for FOI Determination")
     comment8 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field9 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field9 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                         description="Research & Review of background, policies & other materials for understanding material facts for FOI Determination")
     comment9 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field10 = FloatField('Amount', validators=[DataRequired()])
+    field10 = FloatField('Amount', validators=[DataRequired()],
+                         description="Corro - 3rd party consultation drafting letter, confirming address details for email, creating copies of relevant documents for consideration, specific explanation required if complex")
     comment10 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field11 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field11 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Review 3rd party contentions, making files of same, consideration for inclusion in Material Statement of Fact and Draft FOI Determination")
     field12 = FloatField('Consultations', validators=[DataRequired()])
 
     comment12 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field13 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field13 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Access Refusal for other grounds - Available in public register, Archives, National Film & Sound, etc.")
     comment13 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field14 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field14 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Finalisation of Schedule of Documents, reflecting exemption grounds")
     comment14 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field15 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field15 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Redaction of any information or sections of partially released documents")
     comment15 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field16 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field16 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Converting partial or fully documents into 'printed' PDF versions (so inalterable, no metadata retained)")
     comment16 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field17 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field17 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Final review of Draft FOI Decision, confirming findings of facts with Ops or Other Group")
     comment17 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field18 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field18 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Collating Final FOI decision, all printed PDF documents with information regarding review & appeal rights, including 3rd parties' right to object if determination = to release")
     comment18 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
-    field19 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    field19 = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()],
+                          description="Drafting briefings for executives regarding draft final decision")
     comment19 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
 
@@ -159,3 +177,10 @@ class PostForm(FlaskForm):
 class SurveyForm(FlaskForm):
     survey_name = StringField('Name', validators=[DataRequired(),Length(min=0, max=140)])
     submit = SubmitField('Create')
+
+class ExemptionForm(FlaskForm):
+    exemption_name = SelectField('Exemption', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    exemption_instance = FloatField('Instance #', validators=[DataRequired()])
+    exemption_multiplier = FloatField('Multiplier', validators=[DataRequired()])
+    exemption_time = SelectField('Time Taken', choices=[(1, 1), (1.5, 1.5),(2, 2)],coerce=float,validators=[DataRequired()])
+    submit = SubmitField('Add')
