@@ -339,7 +339,7 @@ def edit_survey(id):
 
         db.session.add(exemption)
         db.session.commit()
-        flash('Exemption submitted!')
+        # flash('Exemption submitted!')
         
         
 
