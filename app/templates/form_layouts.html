@@ -1,4 +1,4 @@
-{% macro form_field(field, autofocus) %}
+{% macro form_field(field) %}
 
         {%- if field.type == 'BooleanField' %}  
               <div class="form-check mb-3">
@@ -26,12 +26,7 @@
         {%- elif field.type == 'TextAreaField' %}
             <div class="mb-3">
               {{ field.label(class='form-label') }} 
-               
-              {% if autofocus %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
-              {% else %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-              {% endif %}
+              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
               {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -45,11 +40,9 @@
         {%- else %}
             <div class="mb-3">
               {{ field.label(class='form-label') }}
-              {% if autofocus %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
-              {% else %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-              {% endif %}
+            
+              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+         
               {%- for error in field.errors %}
               <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -60,7 +53,7 @@
 
 
 
-{% macro survey_field(field, autofocus) %}
+{% macro survey_field(field) %}
         {%- if field.type == 'BooleanField' %}  
               <div class="form-check mb-3">
                 {{ field(class='form-check-input') }}
@@ -91,13 +84,8 @@
 
         {%- elif field.type == 'TextAreaField' %}
             <div class="mb-3">
-              <!-- {{ field.label(class='form-label') }}  -->
-               
-              {% if autofocus %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
-              {% else %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-              {% endif %}
+              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+         
               {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -105,13 +93,9 @@
 
         {%- elif field.type == 'StringField' %}
             <div class="mb-3">
-              <!-- {{ field.label(class='form-label') }}  -->
-               
-              {% if autofocus %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
-              {% else %}
-                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-              {% endif %}
+            
+              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+            
               {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -131,11 +115,10 @@
               </div>
               
               <div class="col">
-                {% if autofocus %}
-                  {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
-                {% else %}
-                  {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-                {% endif %}
+             
+          
+                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+        
                 {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
                 {%- endfor %}
@@ -148,24 +131,24 @@
 
 
 {% macro three_col_row(middle_field, end_field) %}
-    <div class="row pb-5">
+    <div class="row p-0">
       <div class="col-6">
           <p>
             {{ middle_field.description }}
           </p>
       </div>
       <div class="col ">
-        {% set ns = namespace(first_field=true) %}
+       
           {% if middle_field.widget.input_type != 'hidden' -%}
-            {{ survey_field(middle_field, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(middle_field) }}
+          
           {%- endif %}
       </div>
       <div class="col ">
-        {% set ns = namespace(first_field=true) %}
+        
           {% if end_field.widget.input_type != 'hidden' -%}
-            {{ survey_field(end_field, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(end_field) }}
+           
           {%- endif %}
       </div>
     </div>
@@ -173,30 +156,29 @@
 
 
 {% macro three_col_row_extra_field(middle_field, end_field, extra_field) %}
-    <div class="row">
+    <div class="row p-0">
       <div class="col-6">
           <p>
             {{ middle_field.description }}
           </p>
       </div>
       <div class="col">
-        {% set ns = namespace(first_field=true) %}
+       
           {% if middle_field.widget.input_type != 'hidden' -%}
-            {{ survey_field(middle_field, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(middle_field) }}
           {%- endif %}
 
-        {% set ns = namespace(first_field=true) %}
+     
         {% if extra_field.widget.input_type != 'hidden' -%}
-          {{ survey_field(extra_field, ns.first_field) }}
-          {% set ns.first_field = false %}
+          {{ survey_field(extra_field) }}
+     
         {%- endif %}
       </div>
       <div class="col">
-        {% set ns = namespace(first_field=true) %}
+        
           {% if end_field.widget.input_type != 'hidden' -%}
-            {{ survey_field(end_field, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(end_field) }}
+          
           {%- endif %}
       </div>
     </div>
@@ -208,10 +190,10 @@
   <div class="row pb-5 align-items-end">
     <div class="col">
         
-          {% set ns = namespace(first_field=true) %}
+          
           {% if field.widget.input_type != 'hidden' -%}
-            {{ survey_field(field, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(field) }}
+           
           {%- endif %}
         
     </div>
@@ -238,38 +220,38 @@
 {% macro exemption_row(e1,e2,e3,e4,e5) %}
     <div class="row pb-5">
       <div class="col">
-        {% set ns = namespace(first_field=true) %}
+        
           {% if e1.widget.input_type != 'hidden' -%}
-            {{ survey_field(e1, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(e1) }}
+            
           {%- endif %}
       </div>
       <div class="col">
-        {% set ns = namespace(first_field=true) %}
+       
           {% if e2.widget.input_type != 'hidden' -%}
-            {{ survey_field(e2, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(e2) }}
+          
           {%- endif %}
       </div>
       <div class="col">
-        {% set ns = namespace(first_field=true) %}
+       
           {% if e3.widget.input_type != 'hidden' -%}
-            {{ survey_field(e3, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(e3) }}
+          
           {%- endif %}
       </div>
       <div class="col">
-        {% set ns = namespace(first_field=true) %}
+        
           {% if e4.widget.input_type != 'hidden' -%}
-            {{ survey_field(e4, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(e4) }}
+           
           {%- endif %}
       </div>
       <div class="col">
-          {% set ns = namespace(first_field=true) %}
+         
           {% if e5.widget.input_type != 'hidden' -%}
-            {{ survey_field(e5, ns.first_field) }}
-            {% set ns.first_field = false %}
+            {{ survey_field(e5) }}
+           
           {%- endif %}
       </div>
     </div>
