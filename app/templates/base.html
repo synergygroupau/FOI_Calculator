@@ -71,5 +71,57 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous">
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        console.log("test1")
+        // Handle form1 submission
+        $('#form1').on('submit', function(event1) {
+            event1.preventDefault(); // Prevent the default form submission
+           
+            $.ajax({
+                url: $(this).attr('action'), // Get the form action URL
+                method: 'POST',
+                data: $(this).serialize(), // Serialize the form data
+                success: function(response) {
+                    // Log the response for debugging
+                    console.log(response);
+                    // Optionally, you could perform other actions here, like updating the UI
+                },
+                error: function() {
+                    console.log('An error occurred while submitting Form 1.');
+                }
+            });
+        });
+  
+        
+    });
+    </script>
+     <script>
+      $(document).ready(function() {
+        console.log("test2")
+          // Handle form1 submission
+          $('#form2').on('submit', function(event2) {
+             
+              event2.preventDefault(); // Prevent the default form submission
+            
+              $.ajax({
+                  url: $(this).attr('action'), // Get the form action URL
+                  method: 'POST',
+                  data: $(this).serialize(), // Serialize the form data
+                  success: function(response) {
+                      // Log the response for debugging
+                      console.log(response);
+                      // Optionally, you could perform other actions here, like updating the UI
+                  },
+                  error: function() {
+                      console.log('An error occurred while submitting Form 2.');
+                  }
+              });
+          });
+    
+          
+      });
+      </script>
   </body>
 </html>

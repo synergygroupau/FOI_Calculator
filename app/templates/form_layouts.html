@@ -1,5 +1,4 @@
-{% macro form_field(field) %}
-
+{% macro form_field(field, autofocus) %}
         {%- if field.type == 'BooleanField' %}  
               <div class="form-check mb-3">
                 {{ field(class='form-check-input') }}
@@ -18,7 +17,6 @@
 
 
         {%- elif field.type == 'SelectField' %} 
-             
               {{ field.label(class='form-label') }}
               {{ field(class='form-select mb-3') }}
 
@@ -26,7 +24,12 @@
         {%- elif field.type == 'TextAreaField' %}
             <div class="mb-3">
               {{ field.label(class='form-label') }} 
-              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+               
+              {% if autofocus %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
+              {% else %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+              {% endif %}
               {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -40,9 +43,11 @@
         {%- else %}
             <div class="mb-3">
               {{ field.label(class='form-label') }}
-            
-              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-         
+              {% if autofocus %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
+              {% else %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+              {% endif %}
               {%- for error in field.errors %}
               <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -53,7 +58,7 @@
 
 
 
-{% macro survey_field(field) %}
+{% macro survey_field(field, autofocus) %}
         {%- if field.type == 'BooleanField' %}  
               <div class="form-check mb-3">
                 {{ field(class='form-check-input') }}
@@ -81,11 +86,18 @@
           </div>
         </div>
               
+              
+
 
         {%- elif field.type == 'TextAreaField' %}
             <div class="mb-3">
-              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-         
+              <!-- {{ field.label(class='form-label') }}  -->
+               
+              {% if autofocus %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
+              {% else %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+              {% endif %}
               {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -93,9 +105,13 @@
 
         {%- elif field.type == 'StringField' %}
             <div class="mb-3">
-            
-              {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-            
+              <!-- {{ field.label(class='form-label') }}  -->
+               
+              {% if autofocus %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
+              {% else %}
+                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+              {% endif %}
               {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
               {%- endfor %}
@@ -115,10 +131,11 @@
               </div>
               
               <div class="col">
-             
-          
-                {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
-        
+                {% if autofocus %}
+                  {{ field(class='form-control' + (' is-invalid' if field.errors else ''), autofocus=True) }}
+                {% else %}
+                  {{ field(class='form-control' + (' is-invalid' if field.errors else '')) }}
+                {% endif %}
                 {%- for error in field.errors %}
                 <div class="invalid-feedback">{{ error }}</div>
                 {%- endfor %}
@@ -139,10 +156,10 @@
       </div>
       <div class="col ">
        
-          {% if middle_field.widget.input_type != 'hidden' -%}
+         
             {{ survey_field(middle_field) }}
           
-          {%- endif %}
+        
       </div>
       <div class="col ">
         
@@ -275,11 +292,11 @@
         {%- endif %}
       {%- endfor %}
 
-      {% set ns = namespace(first_field=true) %}
+     
       {%- for field in form %}
         {% if field.widget.input_type != 'hidden' -%}
-          {{ form_field(field, ns.first_field) }}
-          {% set ns.first_field = false %}
+          {{ form_field(field) }}
+         
         {%- endif %}
       {%- endfor %}  
     </form>
@@ -287,7 +304,7 @@
 
 
 
-{% macro survey_form(form1,form2,exemptions, action="", method="post", id="", novalidate=False) %}
+{% macro survey_form(form1, action="", method="post", id="", novalidate=False) %}
     <form
       {%- if action != None %} action="{{ action }}"{% endif -%}
       {%- if method %} method="{{ method }}"{% endif %}
@@ -302,7 +319,7 @@
         {%- endif %}
       {%- endfor %}
 
-      {% set ns = namespace(first_field=true) %}
+     
 
       <div class="container">
 
@@ -320,22 +337,54 @@
               {{ three_col_row(form1.field10, form1.comment10)}}
               {{ three_col_row_extra_field(form1.field11, form1.comment12, form1.field12)}}
               {{ three_col_row(form1.field13, form1.comment13)}}
-              {{ banner("Exemptions","","") }}
-              {{ exemption_row(form2.exemption_name, form2.exemption_instance, form2.exemption_multiplier, form2.exemption_time,form2.submit) }}
-              <div class="row pb-5">
-                        {% for exemption in exemptions %}
-                        {% include '_exemption.html' %}
-                      {% endfor %}
-              </div>
-              <hr>
+              
               {{ three_col_row(form1.field14, form1.comment14)}}
               {{ three_col_row(form1.field15, form1.comment15)}}
               {{ three_col_row(form1.field16, form1.comment16)}}
               {{ three_col_row(form1.field17, form1.comment17)}}
               {{ three_col_row(form1.field18, form1.comment18)}}
               {{ three_col_row(form1.field19, form1.comment19)}}
+              
+            
+
               {{ single_col_row(form1.result)}}
-              {{ single_col_row(form1.submit)}}
+              {{ single_col_row(form1.submit_survey)}}
+
+    
+      </div>
+    
+    </form>
+{% endmacro %}
+
+
+
+{% macro exemptions_form(form2,exemptions, action="", method="post", id="", novalidate=False) %}
+    <form
+      {%- if action != None %} action="{{ action }}"{% endif -%}
+      {%- if method %} method="{{ method }}"{% endif %}
+      {%- if id %} id="{{ id }}"{% endif -%}
+      {%- if novalidate %} novalidate{% endif -%}>
+      {{ form2.hidden_tag() }}
+      {%- for field, errors in form2.errors.items() %}
+        {%- if form2[field].widget.input_type == 'hidden' %}
+          {%- for error in errors %}
+          <div class="invalid-feedback">{{ error }}</div>
+          {%- endfor %}
+        {%- endif %}
+      {%- endfor %}
+
+     
+
+      <div class="container">
+
+              {{ banner("Exemptions","","") }}
+              {{ exemption_row(form2.exemption_name, form2.exemption_instance, form2.exemption_multiplier, form2.exemption_time,form2.submit_exemption) }}
+              <div class="row pb-5">
+                        {% for exemption in exemptions %}
+                        {% include '_exemption.html' %}
+                      {% endfor %}
+              </div>
+              <hr>
     
       </div>
     
@@ -371,18 +420,18 @@
                     </div>
                     <div class="col">
                         
-                          {% set ns = namespace(first_field=true) %}
+                          
                           {% if form.survey_name.widget.input_type != 'hidden' -%}
-                            {{ survey_field(form.survey_name, ns.first_field) }}
-                            {% set ns.first_field = false %}
+                            {{ survey_field(form.survey_name) }}
+                           
                           {%- endif %}
                     </div>
                   
                     <div class="col">
-                        {% set ns = namespace(first_field=true) %}
+                        
                           {% if form.submit.widget.input_type != 'hidden' -%}
-                            {{ survey_field(form.submit, ns.first_field) }}
-                            {% set ns.first_field = false %}
+                            {{ survey_field(form.submit) }}
+                            
                           {%- endif %}
                     </div>
               </div>

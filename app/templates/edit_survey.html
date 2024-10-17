@@ -2,7 +2,17 @@
 {% import "form_layouts.html" as wtf %}
 
 {% block content %}
-    <h1>Edit Survey</h1>
-    {{ wtf.survey_form(form1,form2,exemptions) }}
 
+
+    <h1>Edit Survey</h1>
+    <form id="form1" method="post" action="{{ url_for('pass_survey', id=survey.id) }}">
+        {{ wtf.survey_form(form1, id='form1') }}
+    </form>
+
+    <h1>Edit Exemptions</h1>
+    <form id="form2" method="post" action="{{ url_for('pass_exemption', id=survey.id) }}">
+        {{ wtf.exemptions_form(form2, exemptions, id='form2') }}
+    </form>
+
+    
 {% endblock %}
