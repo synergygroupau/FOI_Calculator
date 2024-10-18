@@ -426,71 +426,42 @@ def pass_survey(id):
     return jsonify(success=True, message='Survey submitted successfully!')
     
 
-
-    # return jsonify(success=False, errors=form1.errors)
-
 @app.route('/pass_exemption/<id>', methods=['POST'])
 @login_required
 def pass_exemption(id):
     survey = db.first_or_404(sa.select(Survey).where(Survey.id == id))
     
-    form1 = EditSurveyForm(id)
     form2 = ExemptionForm()
 
-    # form1.survey_name.data = survey.survey_name
-    # form1.field1.data = survey.field1
-    # form1.comment1.data = survey.comment1
-    # form1.field2.data = survey.field2
-    # form1.comment2.data = survey.comment2
-    # form1.field3.data = survey.field3
-    # form1.comment3.data = survey.comment3
-    # form1.field4.data = survey.field4
-    # form1.comment4.data = survey.comment4
-    # form1.field5.data = survey.field5
-    # form1.comment5.data = survey.comment5
-    # form1.field6.data = survey.field6
-    # form1.comment6.data = survey.comment6
-    # form1.field7.data = survey.field7
-    # form1.comment7.data = survey.comment7
-    # form1.field8.data = survey.field8
-    # form1.comment8.data = survey.comment8
-    # form1.field9.data = survey.field9
-    # form1.comment9.data = survey.comment9
-    # form1.field10.data = survey.field10
-    # form1.comment10.data = survey.comment10
-    # form1.field11.data = survey.field11
-    # form1.field12.data = survey.field12
-    # form1.comment12.data = survey. comment12
-    # form1.field13.data = survey.field13
-    # form1.comment13.data = survey.comment13
-    # form1.field14.data = survey.field14
-    # form1.comment14.data = survey.comment14
-    # form1.field15.data = survey.field15
-    # form1.comment15.data = survey.comment15
-    # form1.field16.data = survey. field16
-    # form1.comment16.data = survey.comment16
-    # form1.field17.data = survey.field17
-    # form1.comment17.data = survey.comment17
-    # form1.field18.data = survey.field18
-    # form1.comment18.data = survey.comment18
-    # form1.field19.data = survey.field19
-    # form1.comment19.data = survey.comment19
-    # form1.result.data = survey.result
-
-
-    # if form2.submit_exemption.data and form2.validate_on_submit():
-    exemption = Exemption(
-        exemption_name=form2.exemption_name.data,
-        exemption_instance=form2.exemption_instance.data,
-        exemption_multiplier=form2.exemption_multiplier.data,
-        exemption_time=form2.exemption_time.data,
-        survey_id=survey.id
-    )
-    db.session.add(exemption)
-    db.session.commit()
+    if form2.validate_on_submit():
+        exemption = Exemption(
+            exemption_name=form2.exemption_name.data,
+            exemption_instance=form2.exemption_instance.data,
+            exemption_multiplier=form2.exemption_multiplier.data,
+            exemption_time=form2.exemption_time.data,
+            survey_id=survey.id
+        )
+        db.session.add(exemption)
+        db.session.commit()
+    
+        return jsonify(
+            success=True, 
+            message='Exemption submitted successfully!',
+            exemption_name=exemption.exemption_name,
+            exemption_multiplier=exemption.exemption_multiplier,
+            exemption_time=exemption.exemption_time
+        )
      
-    return jsonify(success=True, message='Exemption submitted successfully!')
+    return jsonify(success=False, message='Exemption submission failed!')
        
 
-    # return jsonify(success=False, errors=form2.errors)
-  
+
+@app.route('/get_exemptions/<id>', methods=['GET'])
+@login_required
+def get_exemptions(id):
+    survey = db.first_or_404(sa.select(Survey).where(Survey.id == id))
+    exemptions = db.session.query(Exemption).filter_by(survey_id=survey.id).order_by(Exemption.timestamp.desc()).all()
+
+    rendered_exemptions = ''.join([render_template('_exemption.html', exemption=exemption) for exemption in exemptions])
+
+    return jsonify(html=rendered_exemptions)

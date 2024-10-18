@@ -10,9 +10,11 @@
     </form>
 
     <h1>Edit Exemptions</h1>
+    <input type="hidden" id="survey-id" value="{{ survey.id }}">
     <form id="form2" method="post" action="{{ url_for('pass_exemption', id=survey.id) }}">
         {{ wtf.exemptions_form(form2, exemptions, id='form2') }}
     </form>
 
+    
     
 {% endblock %}

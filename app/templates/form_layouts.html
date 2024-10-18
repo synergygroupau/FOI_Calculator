@@ -378,9 +378,10 @@
       <div class="container">
 
               {{ banner("Exemptions","","") }}
+              
               {{ exemption_row(form2.exemption_name, form2.exemption_instance, form2.exemption_multiplier, form2.exemption_time,form2.submit_exemption) }}
-              <div class="row pb-5">
-                        {% for exemption in exemptions %}
+              <div id="exemptions-list" class="row pb-5">
+                      {% for exemption in exemptions %}
                         {% include '_exemption.html' %}
                       {% endfor %}
               </div>

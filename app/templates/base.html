@@ -98,29 +98,51 @@
     });
     </script>
      <script>
-      $(document).ready(function() {
-        console.log("test2")
-          // Handle form1 submission
-          $('#form2').on('submit', function(event2) {
-             
-              event2.preventDefault(); // Prevent the default form submission
-            
+     $(document).ready(function () {
+
+          $('#form2').on('submit', function (e) {
+              e.preventDefault(); // Prevent the form from submitting the default way
+
               $.ajax({
                   url: $(this).attr('action'), // Get the form action URL
-                  method: 'POST',
-                  data: $(this).serialize(), // Serialize the form data
-                  success: function(response) {
-                      // Log the response for debugging
-                      console.log(response);
-                      // Optionally, you could perform other actions here, like updating the UI
+                  type: "POST",
+                  data: $(this).serialize(),
+                  success: function (response) {
+                      if (response.success) {
+                          // Clear the form after successful submission
+                          $('#form2')[0].reset();
+                          
+                          fetchUpdatedExemptions();
+                      }
                   },
-                  error: function() {
-                      console.log('An error occurred while submitting Form 2.');
+                  error: function (error) {
+                      console.log('Error:', error);
                   }
               });
           });
-    
-          
+
+
+          function fetchUpdatedExemptions() {
+
+              let surveyId = document.getElementById('survey-id').value;
+              let exemptionsUrl = "{{ url_for('get_exemptions', id='__SURVEY_ID__') }}".replace('__SURVEY_ID__', surveyId);
+              $.ajax({
+                  url: exemptionsUrl,
+                  type: "GET",
+                  success: function (response) {
+                      var exemptionsList = $('#exemptions-list');
+                      exemptionsList.html(response.html);  // Replace the content with the rendered HTML
+                  },
+                  error: function (error) {
+                      console.log('Error fetching updated exemptions:', error);
+                  }
+              });
+          }
+
+
+
+
+
       });
       </script>
   </body>
