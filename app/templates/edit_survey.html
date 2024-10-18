@@ -4,17 +4,49 @@
 {% block content %}
 
 
-    <h1>Edit Survey</h1>
+    <h4>New FOI calculations</h4>
+    <hr>
     <form id="form1" method="post" action="{{ url_for('pass_survey', id=survey.id) }}">
         {{ wtf.survey_form(form1, id='form1') }}
     </form>
 
-    <h1>Edit Exemptions</h1>
+    <h4>FOI Exemptions</h4>
+    <hr>
     <input type="hidden" id="survey-id" value="{{ survey.id }}">
     <form id="form2" method="post" action="{{ url_for('pass_exemption', id=survey.id) }}">
         {{ wtf.exemptions_form(form2, exemptions, id='form2') }}
     </form>
 
+    <div class="row p-3">
+        <div class="col">
+            <button type="submit" form="form1" class="btn btn-primary">Save</button>
+        </div>
+        <div class="col">
+
+        </div>
+        {{ wtf.single_col_row(form1.result)}}
+
+        <!-- <div class="col">
+            <div style="background-color: rgb(236, 236, 236);"class="row">
+                <div class="col">
+                    <h5>Total time:</h5>
+                    
+                </div>
+                <div class="col">
+                   
+
+                    {% if form1.result.data is none %}
+                    <h2>0 hours</h2>
+                    {% else %} -->
+                    <!-- <h2>{{ form1.result.data }} hours</h2> -->
+                    <!-- {% endif %}
+                </div>
+            </div>
+          
+        </div> -->
+        
+    </div>
+    <br>
     
-    
+
 {% endblock %}

@@ -361,9 +361,9 @@ def edit_survey(id):
     form1.comment18.data = survey.comment18
     form1.field19.data = survey.field19
     form1.comment19.data = survey.comment19
+
     form1.result.data = survey.result
-
-
+    # form1.result.data = (form1.field1.data or 0) + (form1.field2.data or 0)
 
     exemptions = db.paginate(survey.following_exemptions(),error_out=False)
         

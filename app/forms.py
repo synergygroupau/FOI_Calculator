@@ -145,27 +145,35 @@ class EditSurveyForm(FlaskForm):
     comment19 = TextAreaField('Say something', validators=[ Length(min=0, max=140)])
 
 
-    result = FloatField('Total', validators=[DataRequired()])
+    result = FloatField('Total time', validators=[DataRequired()],render_kw={'readonly': True})
     submit_survey = SubmitField('Save')
 
     def __init__(self, original_survey_content, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_survey_content = original_survey_content
     
-    # def __init__(self, original_survey, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.survey.data = original_survey.body
-    #     self.field1.data = original_survey.field1
-    #     self.field2.data = original_survey.field2
-    #     self.field3.data = original_survey.field3
+   
 
-    # def validate_survey(self, survey):
-    #     if survey.data != self.original_survey_content:
-    #         existing_survey = db.session.scalar(sa.select(Survey).where(
-    #             Survey.body == survey.data)) 
-    #         if existing_survey is not None:
-    #             raise ValidationError('Please use a different survey response.')
 
+
+    def validate(self):
+        # Call the parent's validate method first
+        if not super().validate():
+            return False
+
+        # Calculate the sum of field1, field2, and field3
+        total = 0
+        if self.field1.data:
+            total += self.field1.data
+        if self.field2.data:
+            total += self.field2.data
+        if self.field3.data:
+            total += self.field3.data
+
+        # Set the result field with the calculated total
+        self.result.data = total
+
+        return True
 
 class EmptyForm(FlaskForm): 
     submit = SubmitField('Submit')
@@ -184,7 +192,7 @@ class SurveyForm(FlaskForm):
 class ExemptionForm(FlaskForm):
     exemption_name = SelectField('Exemption',
                                  choices=[("sss", "sss"), ("sss", "sss")],validators=[DataRequired()])
-    exemption_instance = FloatField('Instance #', validators=[DataRequired()], render_kw={'readonly': True})
+    exemption_instance = FloatField('Instances', validators=[DataRequired()])
     exemption_multiplier = SelectField('Multiplier', choices=[
         (0.1, 0.1),(0.2, 0.2),(0.3, 0.3),(0.4, 0.4),(0.5, 0.5),(0.6, 0.6),(0.7, 0.7),(0.8, 0.8),(0.9, 0.9)
         ],coerce=float,validators=[DataRequired()])
@@ -194,7 +202,7 @@ class ExemptionForm(FlaskForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.exemption_instance.data = 7
+        # self.exemption_instance.data = 7
         self.exemption_name.choices = self.load_exemptions()
 
     @staticmethod

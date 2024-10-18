@@ -145,5 +145,21 @@
 
       });
       </script>
+
+
+<script>
+  function updateResult() {
+      var field1 = parseFloat(document.querySelector('[name="field1"]').value) || 0;
+      var field2 = parseFloat(document.querySelector('[name="field2"]').value) || 0;
+     
+      var result = field1 + field2; 
+      document.querySelector('[name="result"]').value = result; 
+  }
+
+  document.querySelector('[name="field1"]').addEventListener('input', updateResult);
+  document.querySelector('[name="field2"]').addEventListener('input', updateResult);
+</script>
+
+
   </body>
 </html>
